@@ -38,13 +38,13 @@ RUN additionalPackages=" \
         libc-client2007e \
         libenchant1c2a \
         libfreetype6 \
-        libicu52 \
+        libicu63 \
         libjpeg62-turbo \
         libmcrypt4 \
-        libpng-0 \
+        libpng16-16 \
         libpq5 \
         libsybdb5 \
-        libtidy-0.99-0 \
+        libtidy5deb1 \
         libx11-6 \
         libxpm4 \
         libxslt1.1 \
@@ -92,6 +92,7 @@ RUN additionalPackages=" \
     && echo "deb http://httpredir.debian.org/debian jessie contrib non-free" > /etc/apt/sources.list.d/additional.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends $additionalPackages $buildDeps $runDeps \
+#    && apt-get install -y --no-install-recommends $additionalPackages \
     && docker-php-source extract \
     && cd /usr/src/php/ext/ \
     && curl -L http://xdebug.org/files/xdebug-$XDEBUG_VERSION.tgz | tar -zxf - \
@@ -109,7 +110,7 @@ RUN additionalPackages=" \
     && pecl install igbinary \
 #    && printf "\n" | pecl install memcache \
     && pecl install mongodb \
-    && pecl install redis \
+    && printf "\n" | pecl install redis \
     && for ext in $phpModules; do \
            rm -f /usr/local/etc/php/conf.d/docker-php-ext-$ext.ini; \
        done \
