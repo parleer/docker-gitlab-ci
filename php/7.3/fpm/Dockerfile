@@ -36,6 +36,7 @@ RUN additionalPackages=" \
         libxpm-dev \
         libxslt1-dev \
         zlib1g-dev \
+        libzip-dev \
     " \
     && runDeps=" \
         libc-client2007e \
