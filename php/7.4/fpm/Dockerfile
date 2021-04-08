@@ -1,4 +1,4 @@
-FROM php:7.3-fpm
+FROM php:7.4-fpm
 
 ENV XDEBUG_VERSION 2.9.0
 
@@ -104,7 +104,8 @@ RUN additionalPackages=" \
     && ln -s /usr/lib/x86_64-linux-gnu/libldap_r.a /usr/lib/libldap_r.a \
     && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/libsybdb.a \
     && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-xpm-dir=/usr/include/ \
+#    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-xpm-dir=/usr/include/ \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-xpm \
     && docker-php-ext-configure imap --with-imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-configure ldap --with-ldap-sasl \
     && docker-php-ext-install $phpModules \
@@ -145,9 +146,14 @@ RUN curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar \
 # Install Node.js & Yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-    && curl -sL https://deb.nodesource.com/setup_13.x | bash - \
+    && curl -sL https://deb.nodesource.com/setup_15.x | bash - \
     && apt-get install -y nodejs build-essential yarn \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Install awscli & jq
+RUN apt-get install -y awscli jq \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 
 COPY msmtprc /etc/
 COPY entrypoint.sh /entrypoint.sh
